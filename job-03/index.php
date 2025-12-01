@@ -8,13 +8,13 @@ class Category
     private DateTime    $createdAt;
     private DateTime    $updatedAt;
 
-    public function __construct(?int $id, string $name, string $description, DateTime $createdAt, DateTime $updatedAt)
+    public function __construct(?int $id = null, string $name = "", string $description = "", ?DateTime $createdAt = null, ?DateTime $updatedAt = null)
     {
         $this->id = $id;
         $this->name = $name;
         $this->description = $description;
-        $this->createdAt = $createdAt;
-        $this->updatedAt = $updatedAt;
+        $this->createdAt = $createdAt ?? new DateTime();
+        $this->updatedAt = $updatedAt ?? new DateTime();
     }
 
     public function getId(): ?int
@@ -87,7 +87,7 @@ class Product
     private     DateTime    $updatedAt;
     private     ?int        $category_id;
 
-    public function __construct(?int $id, string $name, array $photos, int $price, string $description, int $quantity, Datetime $createdAt, Datetime $updatedAt)
+    public function __construct(?int $id = null, string $name = "", array $photos = [], int $price = 0, string $description = "", int $quantity = 0, ?Datetime $createdAt = null, ?Datetime $updatedAt = null, ?int $category_id = null)
     {
         $this->id = $id;
         $this->name = $name;
@@ -95,8 +95,9 @@ class Product
         $this->price = $price;
         $this->description = $description;
         $this->quantity = $quantity;
-        $this->createdAt = $createdAt;
-        $this->updatedAt = $updatedAt;
+        $this->createdAt = $createdAt ?? new DateTime();
+        $this->updatedAt = $updatedAt ?? new DateTime();
+        $this->category_id = $category_id;
     }
 
     public function getID(): ?int
@@ -140,7 +141,7 @@ class Product
     public function setPrice(int $price): self
     {
         if ($price < 0) {
-            throw new Exception('Erreur, montant inférieur à 0, modifier le montnant');
+            throw new Exception('Erreur, montant inférieur à 0, veuillez modifier le montant');
         }
 
         $this->price = $price;
