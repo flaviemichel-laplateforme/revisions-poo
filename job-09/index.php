@@ -117,24 +117,57 @@ if ($productData) {
     //     echo "Erreur : Aucun produit trouvé avec cet ID.";
     // }
     // On utilise une instance vide pour appeler la méthode
-    $productManager = new Product();
-    $allProducts = $productManager->findAll();
+    //     $productManager = new Product();
+    //     $allProducts = $productManager->findAll();
 
-    echo "<h1>Liste de tous les produits (Job 08)</h1>";
+    //     echo "<h1>Liste de tous les produits (Job 08)</h1>";
 
-    if (!empty($allProducts)) {
-        echo "<ul>";
-        foreach ($allProducts as $product) {
-            echo "<li>";
-            echo "<strong>" . $product->getName() . "</strong> - " . $product->getPrice() . " € ";
-            // Petit bonus : afficher la catégorie si elle existe
-            if ($cat = $product->getCategory()) {
-                echo "<em>(Catégorie : " . $cat->getName() . ")</em>";
-            }
-            echo "</li>";
-        }
-        echo "</ul>";
-    } else {
-        echo "Aucun produit en base de données.";
-    }
-}
+    //     if (!empty($allProducts)) {
+    //         echo "<ul>";
+    //         foreach ($allProducts as $product) {
+    //             echo "<li>";
+    //             echo "<strong>" . $product->getName() . "</strong> - " . $product->getPrice() . " € ";
+    //             // Petit bonus : afficher la catégorie si elle existe
+    //             if ($cat = $product->getCategory()) {
+    //                 echo "<em>(Catégorie : " . $cat->getName() . ")</em>";
+    //             }
+    //             echo "</li>";
+    //         }
+    //         echo "</ul>";
+    //     } else {
+    //         echo "Aucun produit en base de données.";
+    //     }
+    // }
+
+//     // 1. On instancie un nouveau produit (sans ID pour l'instant)
+//     $newProduct = new Product(
+//         null,                   // id (null car pas encore en BDD)
+//         "Super Vélo",           // name
+//         ["https://image.com/velo.jpg"], // photos
+//         45000,                  // price (450.00 €)
+//         "Un vélo tout terrain incroyable", // description
+//         5,                      // quantity
+//         new DateTime(),         // createdAt
+//         new DateTime(),         // updatedAt
+//         2                       // category_id (supposons 2 = Électronique ou autre)
+//     );
+
+//     // Affichage avant insertion (ID est null)
+//     echo "<h3>Avant insertion :</h3>";
+//     var_dump($newProduct);
+
+//     // 2. On lance la création en base
+//     $createdProduct = $newProduct->create();
+
+//     if ($createdProduct) {
+//         echo "<h3>Succès ! Produit inséré.</h3>";
+//         echo "Nouvel ID généré : " . $createdProduct->getId() . "<br>";
+
+//         // Vérification finale de l'objet mis à jour
+//         echo "<pre>";
+//         var_dump($createdProduct);
+//         echo "</pre>";
+//     } else {
+//         echo "Erreur lors de l'insertion.";
+//     }
+// }
