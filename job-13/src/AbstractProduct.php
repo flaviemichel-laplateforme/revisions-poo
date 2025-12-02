@@ -2,17 +2,17 @@
 
 date_default_timezone_set('Europe/Paris');
 
-class Product
+abstract class AbstractProduct
 {
-    private     ?int         $id;
-    private     string      $name;
-    private     array       $photos;
-    private     int         $price;
-    private     string      $description;
-    private     int         $quantity;
-    private     DateTime    $createdAt;
-    private     DateTime    $updatedAt;
-    private     ?int        $category_id;
+    protected     ?int         $id;
+    protected     string      $name;
+    protected     array       $photos;
+    protected     int         $price;
+    protected     string      $description;
+    protected     int         $quantity;
+    protected     DateTime    $createdAt;
+    protected     DateTime    $updatedAt;
+    protected     ?int        $category_id;
 
     public function __construct(?int $id = null, string $name = "", array $photos = [], int $price = 0, string $description = "", int $quantity = 0, ?Datetime $createdAt = null, ?Datetime $updatedAt = null, ?int $category_id = null)
     {
@@ -165,72 +165,14 @@ class Product
      * Récupère les infos en BDD et hydrate l'instance actuelle.
      * Retourne l'objet lui-même (this) si trouvé, sinon false.
      */
-    public function findOneById(int $id)
-    {
-
-        $pdo = new PDO('mysql:host=localhost;dbname=draft-shop;charset=utf8', 'root', '');
-
-        $sql = "SELECT * FROM product WHERE id = :id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(['id' => $id]);
-
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$result) {
-            return false;
-        }
-
-        // 5. Hydratation : On remplit les propriétés de l'objet actuel ($this)
-        $this->id = $result['id'];
-        $this->name = $result['name'];
-        $this->photos = json_decode($result['photos'], true); // Décodage JSON
-        $this->price = $result['price'];
-        $this->description = $result['description'];
-        $this->quantity = $result['quantity'];
-        $this->createdAt = new DateTime($result['created_at']); // Conversion String -> DateTime
-        $this->updatedAt = new DateTime($result['updated_at']);
-        $this->category_id = $result['category_id'];
-
-        // 6. On retourne l'objet lui-même pour pouvoir chaîner ou valider
-        return $this;
-    }
+    abstract public function findOneById(int $id);
 
     /**
      * Retourne un tableau contenant tous les produits de la base de données.
      * @return Product[]
      */
-    public function findAll(): array
-    {
-        // 1. Connexion BDD
-        $pdo = new PDO('mysql:host=localhost;dbname=draft-shop;charset=utf8', 'root', '');
+    abstract public function findAll();
 
-        // 2. Requête pour tout sélectionner
-        $sql = "SELECT * FROM product";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $products = [];
-
-        // 3. Boucle pour transformer chaque ligne en objet Product
-        foreach ($results as $row) {
-            $products[] = new Product(
-                $row['id'],
-                $row['name'],
-                json_decode($row['photos'], true),
-                $row['price'],
-                $row['description'],
-                $row['quantity'],
-                new DateTime($row['created_at']),
-                new DateTime($row['updated_at']),
-                $row['category_id']
-            );
-        }
-
-        return $products;
-    }
-
-    // --- Job 09 : Créer un nouveau produit ---
 
     public function create()
     {

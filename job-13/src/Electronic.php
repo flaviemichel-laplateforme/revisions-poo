@@ -86,7 +86,7 @@ class Electronic extends Product
                 INNER JOIN electronic ON product.id = electronic.product_id
                 WHERE product.id = :id";
 
-        $stmt = prepare($sql);
+        $stmt = $pdo->prepare($sql);
         $stmt->execute(['id' => $id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
