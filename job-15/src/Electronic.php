@@ -80,7 +80,7 @@ class Electronic extends AbstractProduct implements StockableInterface
         return $stmt->execute([
             'id' => $this->getId(),
             'brand' => $this->brand,
-            'waranty-fee' => $this->waranty_fee
+            'waranty_fee' => $this->waranty_fee
         ]);
     }
 
