@@ -1,5 +1,10 @@
 <?php
 
+namespace App;
+
+use DateTime;
+use PDO;
+
 class Category
 {
     private ?int $id;

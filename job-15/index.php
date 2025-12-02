@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__ . '/src/Category.php';
-require_once __DIR__ . '/src/AbstractProduct.php';
-require_once __DIR__ . '/src/Clothing.php';
-require_once __DIR__ . '/src/Electronic.php';
+require_once __DIR__ . '/vendor/autoload.php';
+
+use App\Clothing;
+use App\Electronic;
 
 $host = 'localhost';
 $dbName = 'draft-shop';
@@ -251,36 +251,44 @@ $pass = '';
 //     echo "Erreur lors de la création.";
 // }
 
-try {
-    // $p = new AbstractProduct(); // Decommenter cette ligne doit provoquer une erreur fatale
-    echo "Impossible d'instancier AbstractProduct directement (C'est normal !)<br>";
-} catch (Error $e) {
-    echo "Erreur attendue : " . $e->getMessage();
-}
-// Test 2 : Utiliser Clothing (Doit fonctionner comme avant)
-$pull = new Clothing();
-// On hydrate avec un ID existant (celui créé au Job 12, ex: 8 ou 9)
-// Remplacez l'ID par un ID qui existe dans votre table clothing
-$res = $pull->findOneById(9);
+// try {
+//     // $p = new AbstractProduct(); // Decommenter cette ligne doit provoquer une erreur fatale
+//     echo "Impossible d'instancier AbstractProduct directement (C'est normal !)<br>";
+// } catch (Error $e) {
+//     echo "Erreur attendue : " . $e->getMessage();
+// }
+// // Test 2 : Utiliser Clothing (Doit fonctionner comme avant)
+// $pull = new Clothing();
+// // On hydrate avec un ID existant (celui créé au Job 12, ex: 8 ou 9)
+// // Remplacez l'ID par un ID qui existe dans votre table clothing
+// $res = $pull->findOneById(9);
 
-if ($res) {
-    echo "<h1>Vêtement récupéré via AbstractProduct : " . $pull->getName() . "</h1>";
-    echo "Type : " . $pull->getType();
-} else {
-    echo "Vêtement non trouvé (vérifiez l'ID).";
-}
+// if ($res) {
+//     echo "<h1>Vêtement récupéré via AbstractProduct : " . $pull->getName() . "</h1>";
+//     echo "Type : " . $pull->getType();
+// } else {
+//     echo "Vêtement non trouvé (vérifiez l'ID).";
+// }
 
 // On crée un nouveau vêtement avec 10 en stock
-$pull = new Clothing(null, "Pull Test Stock", [], 5000, "Desc", 10, null, null, 1, "M", "Rouge", "Laine", 2);
+// $pull = new Clothing(null, "Pull Test Stock", [], 5000, "Desc", 10, null, null, 1, "M", "Rouge", "Laine", 2);
 
-echo "<h1>Test Job 14 : Gestion des Stocks</h1>";
-echo "Stock initial : " . $pull->getQuantity() . "<br>"; // Doit afficher 10
+// echo "<h1>Test Job 14 : Gestion des Stocks</h1>";
+// echo "Stock initial : " . $pull->getQuantity() . "<br>"; // Doit afficher 10
 
-// On ajoute 5
-$pull->addStocks(5);
-echo "Après ajout de 5 : " . $pull->getQuantity() . "<br>"; // Doit afficher 15
+// // On ajoute 5
+// $pull->addStocks(5);
+// echo "Après ajout de 5 : " . $pull->getQuantity() . "<br>"; // Doit afficher 15
 
-// On retire 3
-$pull->removeStocks(3);
-echo "Après retrait de 3 : " . $pull->getQuantity() . "<br>"; // Doit afficher 12
-// }
+// // On retire 3
+// $pull->removeStocks(3);
+// echo "Après retrait de 3 : " . $pull->getQuantity() . "<br>"; // Doit afficher 12
+// // }
+
+// / --- Test du code (Job 15 validé) ---
+
+$tshirt = new Clothing(null, "T-shirt Namespace", [], 1500, "Test", 10, null, null, 1, "M", "Vert", "Coton", 2);
+
+echo "<h1>Job 15 : Autoloading réussi !</h1>";
+echo "Produit : " . $tshirt->getName() . "<br>";
+echo "Classe : " . get_class($tshirt); // Devrait afficher App\Clothing
