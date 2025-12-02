@@ -227,4 +227,27 @@ if ($productData) {
     //     echo "Taille : " . $verif->getSize() . "<br>"; // Doit afficher "L"
     //     echo "Couleur : " . $verif->getColor() . "<br>"; // Doit afficher "Bleu"
     // }
+
+    // TEST JOB 12 Création d'un smartphone
+    $phone = new Electronic(
+        null,
+        "iPhone Test",
+        ["img.jpg"],
+        90000,
+        "Smartphone puissant",
+        5,
+        null,
+        null,
+        2,
+        "Apple",
+        50 // Marque et Frais de garantie
+    );
+
+    // Insertion
+    if ($phone->create()) {
+        echo "<h1>Électronique créé ! ID: " . $phone->getId() . "</h1>";
+        echo "Marque : " . $phone->getBrand();
+    } else {
+        echo "Erreur lors de la création.";
+    }
 }
