@@ -1,7 +1,9 @@
 <?php
 
-require_once __DIR__ . '/AbstractProduct.php';
-require_once __DIR__ . '/StockableInterface.php';
+namespace App;
+
+use App\Abstract\AbstractProduct;
+use App\Interface\StockableInterface;
 
 class Electronic extends AbstractProduct implements StockableInterface
 {
