@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Interface;
+
 interface StockableInterface
 {
     public function addStocks(int $stock): self;

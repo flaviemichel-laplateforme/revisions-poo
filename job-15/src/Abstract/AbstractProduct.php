@@ -1,5 +1,12 @@
 <?php
 
+namespace App\Abstract;
+
+use DateTime;
+use PDO;
+use Exception;
+use App\Category;
+
 date_default_timezone_set('Europe/Paris');
 
 abstract class AbstractProduct
