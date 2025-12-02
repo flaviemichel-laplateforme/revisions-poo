@@ -1,12 +1,20 @@
 <?php
 
-class Category
+namespace App;
+
+use App\Interface\EntityInterface;
+use App\EntityCollection;
+use DateTime;
+
+class Category implements EntityInterface
 {
     private ?int $id;
     private string $name;
     private string  $description;
     private DateTime    $createdAt;
     private DateTime    $updatedAt;
+
+    private EntityCollection $products;
 
     public function __construct(?int $id = null, string $name = "", string $description = "", ?DateTime $createdAt = null, ?DateTime $updatedAt = null)
     {
@@ -15,6 +23,8 @@ class Category
         $this->description = $description;
         $this->createdAt = $createdAt ?? new DateTime();
         $this->updatedAt = $updatedAt ?? new DateTime();
+
+        $this->products = new EntityCollection();
     }
 
     public function getId(): ?int
@@ -83,31 +93,13 @@ class Category
     //     Retourner un tableau d'objets Product.
 
     // Ajoutez ceci à la fin de votre classe Category (n'oubliez pas d'importer Product si vous utilisez des namespaces, mais ici nous sommes en simple require) :
-    public function getProducts()
+    public function getProducts(): EntityCollection
     {
-        $pdo = new PDO("mysql:host=localhost;dbname=draft-shop;charset=utf8", 'root', '');
-        $sql = "SELECT * FROM product WHERE category_id = :id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(['id' => $this->id]);
+        return $this->products->retrieve($this);
+    }
 
-        $products = [];
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach ($results as $row) {
-            $products[] = new Product(
-                $row['id'],
-                $row['name'],
-                json_decode($row['photos'], true), // Décodage du JSON
-                $row['price'],
-                $row['description'],
-                $row['quantity'],
-                new DateTime($row['created_at']),
-                new DateTime($row['updated_at']),
-                $row['category_id']
-            );
-        }
-
-        // On retourne le tableau d'objets (qui peut être vide)
-        return $products;
+    public function getProductsArray(): array
+    {
+        return $this->products->retrieve($this)->get();
     }
 }
