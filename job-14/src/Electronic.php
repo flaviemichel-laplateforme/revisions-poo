@@ -1,8 +1,9 @@
 <?php
 
 require_once __DIR__ . '/AbstractProduct.php';
+require_once __DIR__ . '/StockableInterface.php';
 
-class Electronic extends AbstractProduct
+class Electronic extends AbstractProduct implements StockableInterface
 {
     private string $brand;
     private int $waranty_fee;
@@ -139,5 +140,17 @@ class Electronic extends AbstractProduct
         }
 
         return $electronics;
+    }
+
+    public function addStocks(int $stock): self
+    {
+        $this->quantity += $stock;
+        return $this;
+    }
+
+    public function removeStocks(int $stock): self
+    {
+        $this->quantity -= $stock;
+        return $this;
     }
 }

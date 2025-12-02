@@ -269,4 +269,18 @@ if ($res) {
 } else {
     echo "Vêtement non trouvé (vérifiez l'ID).";
 }
+
+// On crée un nouveau vêtement avec 10 en stock
+$pull = new Clothing(null, "Pull Test Stock", [], 5000, "Desc", 10, null, null, 1, "M", "Rouge", "Laine", 2);
+
+echo "<h1>Test Job 14 : Gestion des Stocks</h1>";
+echo "Stock initial : " . $pull->getQuantity() . "<br>"; // Doit afficher 10
+
+// On ajoute 5
+$pull->addStocks(5);
+echo "Après ajout de 5 : " . $pull->getQuantity() . "<br>"; // Doit afficher 15
+
+// On retire 3
+$pull->removeStocks(3);
+echo "Après retrait de 3 : " . $pull->getQuantity() . "<br>"; // Doit afficher 12
 // }
