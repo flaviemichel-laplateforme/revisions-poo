@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/src/Category.php';
 require_once __DIR__ . '/src/Product.php';
+require_once __DIR__ . '/src/Clothing.php';
+require_once __DIR__ . '/src/Electronic.php';
 
 $host = 'localhost';
 $dbName = 'draft-shop';
@@ -172,27 +174,57 @@ if ($productData) {
     //     }
     // }
 
-    $product = new Product();
-    $found = $product->findOneById(7);
+    // $product = new Product();
+    // $found = $product->findOneById(7);
 
-    if ($found) {
-        echo "<h3>Avant modification : </h3>";
-        echo "nom : " . $product->getName() . "<br>";
-        echo "prix : " . $product->getPrice() . " €<br>";
-        echo "Dernière MAJ : " . $product->getUpdatedAt()->format('H:i:s') . "<br>";
+    // if ($found) {
+    //     echo "<h3>Avant modification : </h3>";
+    //     echo "nom : " . $product->getName() . "<br>";
+    //     echo "prix : " . $product->getPrice() . " €<br>";
+    //     echo "Dernière MAJ : " . $product->getUpdatedAt()->format('H:i:s') . "<br>";
 
-        $product->setName("Produit modifié" . rand(1, 100));
-        $product->setPrice(100);
+    //     $product->setName("Produit modifié" . rand(1, 100));
+    //     $product->setPrice(100);
 
-        $success = $product->update();
+    //     $success = $product->update();
 
-        if ($success) {
-            echo "<hr><h3>Succès ! Produit mis à jour (job 10).</h3>";
-            echo "Nouveau Nom : " . $product->getName() . "<br>";
-            echo "Nouveau Prix : " . $product->getPrice() . "<br>";
-            echo "Nouvelle Maj : " . $product->getUpdatedAt()->format('H:i:s') . "<br>";
-        } else {
-            echo "Produit ID 7 introuvable.";
-        }
-    }
+    //     if ($success) {
+    //         echo "<hr><h3>Succès ! Produit mis à jour (job 10).</h3>";
+    //         echo "Nouveau Nom : " . $product->getName() . "<br>";
+    //         echo "Nouveau Prix : " . $product->getPrice() . "<br>";
+    //         echo "Nouvelle Maj : " . $product->getUpdatedAt()->format('H:i:s') . "<br>";
+    //     } else {
+    //         echo "Produit ID 7 introuvable.";
+    //     }
+    // }
+    // $tshirt = new Clothing(
+    //     null,
+    //     "T-shirt Geek",
+    //     ["photo.jpg"],
+    //     2000,
+    //     "Un super t-shirt",
+    //     10,
+    //     null,
+    //     null,
+    //     1,
+    //     "L",
+    //     "Bleu",
+    //     "Coton",
+    //     5 // Infos spécifiques
+    // );
+
+    // // 2. Insertion en BDD (Cela doit remplir 'product' ET 'clothing')
+    // if ($tshirt->create()) {
+    //     echo "<h1>Vêtement créé avec ID : " . $tshirt->getId() . "</h1>";
+    // } else {
+    //     echo "Erreur création";
+    // }
+
+    // // 3. Récupération (Vérification que size/color reviennent bien)
+    // $verif = new Clothing();
+    // if ($verif->findOneById($tshirt->getId())) {
+    //     echo "Vêtement récupéré : " . $verif->getName() . "<br>";
+    //     echo "Taille : " . $verif->getSize() . "<br>"; // Doit afficher "L"
+    //     echo "Couleur : " . $verif->getColor() . "<br>"; // Doit afficher "Bleu"
+    // }
 }

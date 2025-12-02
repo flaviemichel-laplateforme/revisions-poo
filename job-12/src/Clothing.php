@@ -76,4 +76,118 @@ class Clothing extends Product
         $this->material_fee = $material_fee;
         return $this;
     }
+
+    public function create()
+    {
+        if (!parent::create()) {
+            return false;
+        }
+
+        $pdo = new PDO('mysql:host=localhost;dbname=draft-shop;charset=utf8', 'root', '');
+
+        $sql = "INSERT INTO clothing (product_id, size, color, type, material_fee)
+                VALUES (:product_id, :size, :color, :type, :material_fee)";
+
+        $stmt = $pdo->prepare($sql);
+
+        $result = $stmt->execute([
+            'product_id' => $this->getId(),
+            'size' => $this->size,
+            'color' => $this->color,
+            'type' => $this->type,
+            'material_fee' => $this->material_fee
+        ]);
+        return $result ? $this : false;
+    }
+
+    public function findOneById(int $id)
+    {
+        $pdo = new PDO('mysql:host=localhost;dbname=draft-shop;charset=utf8', 'root', '');
+        $sql = "SELECT * FROM product
+                INNER JOIN clothing ON product.id = clothing.product_id
+                WHERE product.id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$data) {
+            return false;
+        }
+
+        // Hydratation manuelle (Parent + Enfant)
+        $this->setId($data['id']);
+        $this->setName($data['name']);
+        $this->setPhotos(json_decode($data['photos'], true));
+        $this->setPrice($data['price']);
+        $this->setDescription($data['description']);
+        $this->setQuantity($data['quantity']);
+        $this->setCreatedAt(new DateTime($data['created_at']));
+        $this->setUpdatedAt(new DateTime($data['updated_at']));
+        $this->setCategoryId($data['category_id']);
+
+        // Infos spécifiques Clothing
+        $this->size = $data['size'];
+        $this->color = $data['color'];
+        $this->type = $data['type'];
+        $this->material_fee = $data['material_fee'];
+
+        return $this;
+    }
+
+    public function findAll(): array
+    {
+        $pdo = new PDO('mysql:host=localhost;dbname=draft-shop;charset=utf8', 'root', '');
+
+        $sql = "SELECT * FROM product INNER JOIN clothing ON product.id = clothing.product_id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $clothes = [];
+
+        foreach ($results as $data) {
+            $c = new Clothing(
+                $data['id'],
+                $data['name'],
+                json_decode($data['photos'], true),
+                $data['price'],
+                $data['description'],
+                $data['quantity'],
+                new DateTime($data['created_at']),
+                new DateTime($data['updated_at']),
+                $data['category_id'],
+                $data['size'],
+                $data['color'],
+                $data['type'],
+                $data['material_fee']
+            );
+            $clothes[] = $c;
+        }
+
+        return $clothes;
+    }
+
+    public function update(): bool
+    {
+        // 1. On met à jour la partie parente
+        if (!parent::update()) {
+            return false;
+        }
+
+        // 2. On met à jour la partie spécifique
+        $pdo = new PDO('mysql:host=localhost;dbname=draft-shop;charset=utf8', 'root', '');
+
+        $sql = "UPDATE clothing SET 
+                size = :size, color = :color, type = :type, material_fee = :material_fee 
+                WHERE product_id = :id";
+
+        $stmt = $pdo->prepare($sql);
+        return $stmt->execute([
+            'id' => $this->getId(),
+            'size' => $this->size,
+            'color' => $this->color,
+            'type' => $this->type,
+            'material_fee' => $this->material_fee
+        ]);
+    }
 }
