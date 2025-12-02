@@ -2,8 +2,11 @@
 
 namespace App;
 
+use DateTime;
+use PDO;
 use App\Abstract\AbstractProduct;
 use App\Interface\StockableInterface;
+
 
 class Electronic extends AbstractProduct implements StockableInterface
 {

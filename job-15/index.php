@@ -4,6 +4,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use App\Clothing;
 use App\Electronic;
+use App\Category;
 
 $host = 'localhost';
 $dbName = 'draft-shop';
@@ -292,3 +293,139 @@ $tshirt = new Clothing(null, "T-shirt Namespace", [], 1500, "Test", 10, null, nu
 echo "<h1>Job 15 : Autoloading réussi !</h1>";
 echo "Produit : " . $tshirt->getName() . "<br>";
 echo "Classe : " . get_class($tshirt); // Devrait afficher App\Clothing
+
+
+echo "=== Job 15 - Démonstration PSR-4 avec Composer ===\n\n";
+
+// Test 1: Création d'un vêtement (Clothing)
+echo "1. Création d'un vêtement:\n";
+$clothing = new Clothing(
+    null,
+    'T-shirt Bio',
+    ['https://picsum.photos/200/300'],
+    2500,
+    'Un magnifique t-shirt en coton bio',
+    15,
+    new DateTime(),
+    new DateTime(),
+    1,
+    'M',
+    'Bleu',
+    'Casual',
+    500
+);
+
+try {
+    $clothing->create();
+    echo "   ✓ Vêtement créé avec ID: " . $clothing->getId() . "\n";
+    echo "   - Nom: " . $clothing->getName() . "\n";
+    echo "   - Taille: " . $clothing->getSize() . "\n";
+    echo "   - Couleur: " . $clothing->getColor() . "\n";
+    echo "   - Stock initial: " . $clothing->getQuantity() . "\n\n";
+} catch (Exception $e) {
+    echo "   ✗ Erreur lors de la création: " . $e->getMessage() . "\n\n";
+}
+
+// Test 2: Utilisation de StockableInterface - addStocks
+echo "2. Test de l'interface StockableInterface (addStocks):\n";
+$clothing->addStocks(10);
+echo "   - Stock après ajout de 10 unités: " . $clothing->getQuantity() . "\n";
+$clothing->update();
+echo "   ✓ Stock mis à jour en base de données\n\n";
+
+// Test 3: Utilisation de StockableInterface - removeStocks
+echo "3. Test de l'interface StockableInterface (removeStocks):\n";
+$clothing->removeStocks(5);
+echo "   - Stock après retrait de 5 unités: " . $clothing->getQuantity() . "\n";
+$clothing->update();
+echo "   ✓ Stock mis à jour en base de données\n\n";
+
+// Test 4: Création d'un produit électronique (Electronic)
+echo "4. Création d'un produit électronique:\n";
+$electronic = new Electronic(
+    null,
+    'Smartphone XYZ',
+    ['https://picsum.photos/200/301', 'https://picsum.photos/200/302'],
+    59900,
+    'Smartphone dernière génération avec 128GB',
+    8,
+    new DateTime(),
+    new DateTime(),
+    2,
+    'TechBrand',
+    2400
+);
+
+try {
+    $electronic->create();
+    echo "   ✓ Électronique créé avec ID: " . $electronic->getId() . "\n";
+    echo "   - Nom: " . $electronic->getName() . "\n";
+    echo "   - Marque: " . $electronic->getBrand() . "\n";
+    echo "   - Garantie: " . ($electronic->getWaranty_fee() / 100) . "€\n";
+    echo "   - Stock initial: " . $electronic->getQuantity() . "\n\n";
+} catch (Exception $e) {
+    echo "   ✗ Erreur lors de la création: " . $e->getMessage() . "\n\n";
+}
+
+// Test 5: Test StockableInterface sur Electronic
+echo "5. Test StockableInterface sur Electronic:\n";
+$electronic->addStocks(5);
+echo "   - Stock après ajout de 5 unités: " . $electronic->getQuantity() . "\n";
+$electronic->removeStocks(3);
+echo "   - Stock après retrait de 3 unités: " . $electronic->getQuantity() . "\n";
+$electronic->update();
+echo "   ✓ Stock mis à jour en base de données\n\n";
+
+// Test 6: Récupération avec findOneById
+echo "6. Test de findOneById:\n";
+if ($clothing->getId()) {
+    $clothingFound = (new Clothing())->findOneById($clothing->getId());
+    if ($clothingFound !== false) {
+        echo "   ✓ Vêtement trouvé:\n";
+        echo "   - ID: " . $clothingFound->getId() . "\n";
+        echo "   - Nom: " . $clothingFound->getName() . "\n";
+        echo "   - Taille: " . $clothingFound->getSize() . "\n";
+        echo "   - Couleur: " . $clothingFound->getColor() . "\n\n";
+    }
+}
+
+// Test 7: Récupération de tous les vêtements
+echo "7. Récupération de tous les vêtements (findAll):\n";
+$allClothings = (new Clothing())->findAll();
+echo "   ✓ Nombre de vêtements trouvés: " . count($allClothings) . "\n";
+foreach ($allClothings as $item) {
+    echo "   - [ID: " . $item->getId() . "] " . $item->getName() . " (" . $item->getSize() . ", " . $item->getColor() . ")\n";
+}
+echo "\n";
+
+// Test 8: Récupération de tous les produits électroniques
+echo "8. Récupération de tous les produits électroniques (findAll):\n";
+$allElectronics = (new Electronic())->findAll();
+echo "   ✓ Nombre de produits électroniques trouvés: " . count($allElectronics) . "\n";
+foreach ($allElectronics as $item) {
+    echo "   - [ID: " . $item->getId() . "] " . $item->getName() . " - Marque: " . $item->getBrand() . "\n";
+}
+echo "\n";
+
+// Test 9: Test de la relation avec Category
+echo "9. Test de la relation avec Category:\n";
+$category = $clothing->getCategory();
+if ($category) {
+    echo "   ✓ Catégorie du vêtement:\n";
+    echo "   - ID: " . $category->getId() . "\n";
+    echo "   - Nom: " . $category->getName() . "\n";
+    echo "   - Description: " . $category->getDescription() . "\n\n";
+}
+
+echo "=== Démonstration terminée ===\n";
+echo "\nConcepts illustrés:\n";
+echo "✓ Autoloading PSR-4 avec Composer\n";
+echo "✓ Namespace (App, App\\AbstractClass, App\\InterfaceClass)\n";
+echo "✓ Classe abstraite (AbstractProduct)\n";
+echo "✓ Interface (StockableInterface)\n";
+echo "✓ Héritage (Clothing et Electronic extends AbstractProduct)\n";
+echo "✓ Implémentation d'interface (implements StockableInterface)\n";
+echo "✓ Override de méthodes abstraites\n";
+echo "✓ Encapsulation et accesseurs/mutateurs\n";
+echo "✓ Transactions SQL multi-tables\n";
+echo "✓ Jointures SQL pour requêtes complexes\n";

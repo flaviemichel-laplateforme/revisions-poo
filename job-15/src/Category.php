@@ -4,6 +4,8 @@ namespace App;
 
 use DateTime;
 use PDO;
+use App\Abstract\AbstractProduct;
+use App\Interface\StockableInterface;
 
 class Category
 {
