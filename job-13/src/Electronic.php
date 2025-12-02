@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/Product.php';
+require_once __DIR__ . '/AbstractProduct.php';
 
-class Electronic extends Product
+class Electronic extends AbstractProduct
 {
     private string $brand;
     private int $waranty_fee;
