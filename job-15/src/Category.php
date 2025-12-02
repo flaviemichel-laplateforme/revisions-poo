@@ -6,8 +6,9 @@ use DateTime;
 use PDO;
 use App\Abstract\AbstractProduct;
 use App\Interface\StockableInterface;
+use App\Interface\EntityInterface;
 
-class Category
+class Category implements EntityInterface
 {
     private ?int $id;
     private string $name;
