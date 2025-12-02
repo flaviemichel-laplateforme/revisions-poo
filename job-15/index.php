@@ -429,3 +429,5 @@ echo "✓ Override de méthodes abstraites\n";
 echo "✓ Encapsulation et accesseurs/mutateurs\n";
 echo "✓ Transactions SQL multi-tables\n";
 echo "✓ Jointures SQL pour requêtes complexes\n";
+
+// $produit->save(); // Gère tout seul la création ou la mise à jour

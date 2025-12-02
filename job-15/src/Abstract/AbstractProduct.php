@@ -246,4 +246,13 @@ abstract class AbstractProduct
             'category_id' => $this->category_id
         ]);
     }
+
+    public function save()
+    {
+        if ($this->getId() === null) {
+            return $this->create();
+        }
+
+        return $this->update();
+    }
 }
