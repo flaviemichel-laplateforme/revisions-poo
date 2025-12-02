@@ -6,10 +6,11 @@ use DateTime;
 use PDO;
 use Exception;
 use App\Category;
+use App\Interface\EntityInterface;
 
 date_default_timezone_set('Europe/Paris');
 
-abstract class AbstractProduct
+abstract class AbstractProduct implements EntityInterface
 {
     protected     ?int         $id;
     protected     string      $name;
